@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>PrintIt.Core</Title>
+    <Version>1.0.0.0</Version>
+    <Authors>Wouter Huysentruit</Authors>
+    <Product>PrintIt</Product>
+    <Description>Core library for printing PDF files to a local or network printer in the background</Description>
+    <RepositoryUrl>https://github.com/huysentruitw/print-it</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+</Project>
