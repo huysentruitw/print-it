@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <LangVersion>8</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.9.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PrintIt.Core\PrintIt.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Pdfium\dummy.pdf" />
+    <EmbeddedResource Include="Pdfium\dummy.pdf" />
+  </ItemGroup>
+
+</Project>
