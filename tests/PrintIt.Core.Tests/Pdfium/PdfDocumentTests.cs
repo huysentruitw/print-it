@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using FluentAssertions;
 using PrintIt.Core.Pdfium;
 using Xunit;
@@ -34,6 +35,36 @@ namespace PrintIt.Core.Tests.Pdfium
             
             // Assert
             pageCount.Should().Be(1);
+        }
+
+        [Fact]
+        public void OpenPage_ReturnsRequestedPage()
+        {
+            // Arrange
+            PdfLibrary.EnsureInitialized();
+            using var stream = GetEmbeddedResourceStream("dummy.pdf");
+            using var document = PdfDocument.Open(stream);
+            
+            // Act
+            using PdfPage page = document.OpenPage(0);
+            
+            // Assert
+            page.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void OpenPage_IndexOutOfRange_ShouldThrowIndexOutOfRangeException()
+        {
+            // Arrange
+            PdfLibrary.EnsureInitialized();
+            using var stream = GetEmbeddedResourceStream("dummy.pdf");
+            using var document = PdfDocument.Open(stream);
+            
+            // Act
+            Action action = () => document.OpenPage(5);
+            
+            // Assert
+            action.Should().Throw<IndexOutOfRangeException>();
         }
         
         private static Stream GetEmbeddedResourceStream(string name)

@@ -7,7 +7,7 @@ using Microsoft.Win32.SafeHandles;
 
 namespace PrintIt.Core.Pdfium
 {
-    internal sealed class NativeMethods
+    internal static class NativeMethods
     {
         // Cross-appdomain SyncRoot
         private static readonly string SyncRoot = string.Intern("thq@rCP%WL$K5&61C^DcSpJ6oue79uyB");
@@ -43,20 +43,20 @@ namespace PrintIt.Core.Pdfium
                 return Imports.FPDF_GetPageCount(documentHandle);
             }
         }
-        
-        private static void CloseDocument(IntPtr documentHandle)
+
+        public static PageHandle LoadPage(DocumentHandle documentHandle, int pageIndex)
         {
             lock (SyncRoot)
             {
-                Imports.FPDF_CloseDocument(documentHandle);
+                return Imports.FPDF_LoadPage(documentHandle, pageIndex);
             }
         }
         
         [SecurityCritical]
+        // ReSharper disable once ClassNeverInstantiated.Global
         public sealed class DocumentHandle : SafeHandleZeroOrMinusOneIsInvalid
         {
-            public DocumentHandle()
-                : base(true)
+            public DocumentHandle() : base(true)
             {
             }
 
@@ -65,7 +65,33 @@ namespace PrintIt.Core.Pdfium
             [ResourceConsumption(ResourceScope.Machine)]
             protected override bool ReleaseHandle()
             {
-                CloseDocument(handle);
+                lock (SyncRoot)
+                {
+                    Imports.FPDF_CloseDocument(handle);
+                }
+                
+                return true;
+            }
+        }
+
+        [SecurityCritical]
+        // ReSharper disable once ClassNeverInstantiated.Global
+        public sealed class PageHandle : SafeHandleZeroOrMinusOneIsInvalid
+        {
+            public PageHandle() : base(true)
+            {
+            }
+            
+            [SecurityCritical]
+            [ResourceExposure(ResourceScope.Machine)]
+            [ResourceConsumption(ResourceScope.Machine)]
+            protected override bool ReleaseHandle()
+            {
+                lock (SyncRoot)
+                {
+                    Imports.FPDF_ClosePage(handle);
+                }
+                
                 return true;
             }
         }
@@ -88,9 +114,15 @@ namespace PrintIt.Core.Pdfium
             
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern int FPDF_GetPageCount(DocumentHandle documentHandle);
+
+            [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
+            public static extern PageHandle FPDF_LoadPage(DocumentHandle documentHandle, int pageIndex);
             
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern void FPDF_CloseDocument(IntPtr documentHandle);
+
+            [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
+            public static extern void FPDF_ClosePage(IntPtr pageHandle);
         }
     }
 }

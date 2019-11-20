@@ -31,5 +31,17 @@ namespace PrintIt.Core.Pdfium
         }
 
         public int PageCount => NativeMethods.GetPageCount(_documentHandle);
+
+        public PdfPage OpenPage(int pageIndex)
+        {
+            var pageHandle = NativeMethods.LoadPage(_documentHandle, pageIndex);
+
+            if (pageHandle.IsInvalid)
+            {
+                throw new IndexOutOfRangeException($"Failed to open page with index {pageIndex}");
+            }
+
+            return new PdfPage(this, pageHandle);
+        }
     }
 }
