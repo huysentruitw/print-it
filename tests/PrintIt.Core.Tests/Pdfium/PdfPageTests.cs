@@ -19,6 +19,23 @@ namespace PrintIt.Core.Tests.Pdfium
             // Act & Assert
             page.Document.Should().Be(document);
         }
+
+        [Fact]
+        public void Size_ShouldReturnCorrectSizeInMm()
+        {
+            // Arrange
+            PdfLibrary.EnsureInitialized();
+            using var stream = GetEmbeddedResourceStream("dummy.pdf");
+            using var document = PdfDocument.Open(stream);
+            using var page = document.OpenPage(0);
+            
+            // Act
+            var size = page.SizeInInch;
+            
+            // Assert
+            size.Width.Should().BeApproximately(8.26f, 0.01f);
+            size.Height.Should().BeApproximately(11.69f, 0.01f);
+        }
         
         private static Stream GetEmbeddedResourceStream(string name)
         {

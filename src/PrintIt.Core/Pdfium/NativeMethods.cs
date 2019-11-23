@@ -51,6 +51,22 @@ namespace PrintIt.Core.Pdfium
                 return Imports.FPDF_LoadPage(documentHandle, pageIndex);
             }
         }
+
+        public static float GetPageWidth(PageHandle pageHandle)
+        {
+            lock (SyncRoot)
+            {
+                return Imports.FPDF_GetPageWidthF(pageHandle);
+            }
+        }
+
+        public static float GetPageHeight(PageHandle pageHandle)
+        {
+            lock (SyncRoot)
+            {
+                return Imports.FPDF_GetPageHeightF(pageHandle);
+            }
+        }
         
         [SecurityCritical]
         // ReSharper disable once ClassNeverInstantiated.Global
@@ -121,6 +137,12 @@ namespace PrintIt.Core.Pdfium
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern void FPDF_CloseDocument(IntPtr documentHandle);
 
+            [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
+            public static extern float FPDF_GetPageWidthF(PageHandle pageHandle);
+            
+            [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
+            public static extern float FPDF_GetPageHeightF(PageHandle pageHandle);
+            
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern void FPDF_ClosePage(IntPtr pageHandle);
         }
