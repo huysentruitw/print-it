@@ -12,7 +12,7 @@ namespace PrintIt.Core.Pdfium
             _documentHandle = documentHandle;
         }
 
-        public static MemoryBasedPdfDocument Open(Stream stream, string password = null)
+        public static InMemoryPdfDocument Open(Stream stream, string password = null)
         {
             password = password ?? string.Empty;
 
@@ -21,7 +21,7 @@ namespace PrintIt.Core.Pdfium
                 stream.CopyTo(memoryStream);
                 var buffer = memoryStream.ToArray();
                 var documentHandle = NativeMethods.LoadDocument(buffer, buffer.Length, password);
-                return new MemoryBasedPdfDocument(documentHandle, buffer);
+                return new InMemoryPdfDocument(documentHandle, buffer);
             }
         }
         

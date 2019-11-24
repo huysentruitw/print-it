@@ -2,11 +2,11 @@
 
 namespace PrintIt.Core.Pdfium
 {
-    public sealed class MemoryBasedPdfDocument : PdfDocument
+    public sealed class InMemoryPdfDocument : PdfDocument
     {
         private readonly byte[] _buffer;
 
-        internal MemoryBasedPdfDocument(NativeMethods.DocumentHandle documentHandle, byte[] buffer)
+        internal InMemoryPdfDocument(NativeMethods.DocumentHandle documentHandle, byte[] buffer)
             : base(documentHandle)
         {
             _buffer = buffer;
