@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
@@ -66,6 +67,42 @@ namespace PrintIt.Core.Pdfium
             {
                 return Imports.FPDF_GetPageHeightF(pageHandle);
             }
+        }
+
+        public static void RenderPage(PageHandle pageHandle, IntPtr hdc, Rectangle boundingBox,
+            PageOrientation pageOrientation, PageRenderingFlags flags)
+        {
+            lock (SyncRoot)
+            {
+                Imports.FPDF_RenderPage(hdc, pageHandle,
+                    startX: boundingBox.Left, startY: boundingBox.Top,
+                    sizeX: boundingBox.Width, sizeY: boundingBox.Height,
+                    pageOrientation: (int)pageOrientation, flags: (int)flags);
+            }
+        }
+
+        public enum PageOrientation : int
+        {
+            Normal = 0,
+            Rotated90DegreesClockwise = 1,
+            Rotated180Degrees = 2,
+            Rotated90DegreesCounterClockwise = 3,
+        }
+
+        [Flags]
+        public enum PageRenderingFlags : int
+        {
+            RenderAnnotations = 0x1,
+            OptimizeForLcdDisplay = 0x2,
+            DontUseNativeTextOutput = 0x4,
+            Grayscale = 0x8,
+            BitmapsInReverseByteOrder = 0x10,
+            LimitImageCacheSize = 0x200,
+            ForceHalftoneForImageStretching = 0x400,
+            OptimizeForPrinting = 0x800,
+            DisableTextAntiAliasing = 0x1000,
+            DisableImageAntiAliasing = 0x2000,
+            DisablePathAntiAliasing = 0x4000,
         }
         
         [SecurityCritical]
@@ -142,6 +179,10 @@ namespace PrintIt.Core.Pdfium
             
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern float FPDF_GetPageHeightF(PageHandle pageHandle);
+
+            [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
+            public static extern void FPDF_RenderPage(IntPtr hdc, PageHandle pageHandle, int startX, int startY,
+                int sizeX, int sizeY, int pageOrientation, int flags);
             
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern void FPDF_ClosePage(IntPtr pageHandle);
