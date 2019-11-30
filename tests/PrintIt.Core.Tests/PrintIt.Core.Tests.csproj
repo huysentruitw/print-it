@@ -22,6 +22,8 @@
   <ItemGroup>
     <None Remove="Pdfium\dummy.pdf" />
     <EmbeddedResource Include="Pdfium\dummy.pdf" />
+    <None Remove="Pdfium\dummy-snapshot.png" />
+    <EmbeddedResource Include="Pdfium\dummy-snapshot.png" />
   </ItemGroup>
 
 </Project>
