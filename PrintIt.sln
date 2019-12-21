@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintIt.Core", "src\PrintIt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintIt.Core.Tests", "tests\PrintIt.Core.Tests\PrintIt.Core.Tests.csproj", "{0D9325C3-C396-4C28-8473-9CF6C0A4B0AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintIt.ServiceHost", "src\PrintIt.ServiceHost\PrintIt.ServiceHost.csproj", "{2BC0EEC6-8F22-4E13-93ED-1750940121EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0D9325C3-C396-4C28-8473-9CF6C0A4B0AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D9325C3-C396-4C28-8473-9CF6C0A4B0AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D9325C3-C396-4C28-8473-9CF6C0A4B0AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BC0EEC6-8F22-4E13-93ED-1750940121EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BC0EEC6-8F22-4E13-93ED-1750940121EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BC0EEC6-8F22-4E13-93ED-1750940121EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BC0EEC6-8F22-4E13-93ED-1750940121EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
