@@ -5,6 +5,7 @@ using System.Linq;
 using System.ServiceProcess;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace PrintIt.ServiceHost
@@ -23,10 +24,7 @@ namespace PrintIt.ServiceHost
                 Directory.SetCurrentDirectory(pathToContentRoot);
             }
 
-            IWebHostBuilder builder = CreateWebHostBuilder(
-                args.Where(arg => arg != "--console").ToArray());
-
-            IWebHost host = builder.Build();
+            IWebHost host = CreateWebHostBuilder(args.Where(arg => arg != "--console").ToArray()).Build();
 
             if (isService)
             {
@@ -40,7 +38,13 @@ namespace PrintIt.ServiceHost
         }
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args)
-            => WebHost.CreateDefaultBuilder()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
+            
+            return WebHost.CreateDefaultBuilder(args)
                 .ConfigureLogging(logging =>
                 {
                     logging
@@ -52,7 +56,10 @@ namespace PrintIt.ServiceHost
                         .AddConsole()
                         .AddEventLog(settings => { settings.SourceName = "PrintIt"; });
                 })
-                .UseUrls("http://localhost:7001")
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseUrls(configuration.GetValue<string>("Host:Urls"))
+                .UseKestrel()
+                .UseConfiguration(configuration);
+        }
     }
 }
