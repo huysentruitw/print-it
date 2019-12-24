@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PrintIt.Core;
 
 namespace PrintIt.ServiceHost
 {
@@ -10,6 +11,8 @@ namespace PrintIt.ServiceHost
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddPrintIt();
+            
             services.AddRouting();
             services.AddControllers();
         }
