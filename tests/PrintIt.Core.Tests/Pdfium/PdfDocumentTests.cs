@@ -13,11 +13,11 @@ namespace PrintIt.Core.Tests.Pdfium
         {
             // Arrange
             PdfLibrary.EnsureInitialized();
-            using var stream = GetEmbeddedResourceStream("dummy.pdf");
-            
+            using Stream stream = GetEmbeddedResourceStream("dummy.pdf");
+
             // Act
-            using var document = PdfDocument.Open(stream);
-            
+            using PdfDocument document = PdfDocument.Open(stream);
+
             // Assert
             document.Should().NotBeNull();
         }
@@ -27,12 +27,12 @@ namespace PrintIt.Core.Tests.Pdfium
         {
             // Arrange
             PdfLibrary.EnsureInitialized();
-            using var stream = GetEmbeddedResourceStream("dummy.pdf");
-            using var document = PdfDocument.Open(stream);
-            
+            using Stream stream = GetEmbeddedResourceStream("dummy.pdf");
+            using PdfDocument document = PdfDocument.Open(stream);
+
             // Act
             var pageCount = document.PageCount;
-            
+
             // Assert
             pageCount.Should().Be(1);
         }
@@ -42,12 +42,12 @@ namespace PrintIt.Core.Tests.Pdfium
         {
             // Arrange
             PdfLibrary.EnsureInitialized();
-            using var stream = GetEmbeddedResourceStream("dummy.pdf");
-            using var document = PdfDocument.Open(stream);
-            
+            using Stream stream = GetEmbeddedResourceStream("dummy.pdf");
+            using PdfDocument document = PdfDocument.Open(stream);
+
             // Act
             using PdfPage page = document.OpenPage(0);
-            
+
             // Assert
             page.Should().NotBeNull();
         }
@@ -57,19 +57,19 @@ namespace PrintIt.Core.Tests.Pdfium
         {
             // Arrange
             PdfLibrary.EnsureInitialized();
-            using var stream = GetEmbeddedResourceStream("dummy.pdf");
-            using var document = PdfDocument.Open(stream);
-            
+            using Stream stream = GetEmbeddedResourceStream("dummy.pdf");
+            using PdfDocument document = PdfDocument.Open(stream);
+
             // Act
             Action action = () => document.OpenPage(5);
-            
+
             // Assert
             action.Should().Throw<IndexOutOfRangeException>();
         }
-        
+
         private static Stream GetEmbeddedResourceStream(string name)
         {
-            var type = typeof(PdfDocumentTests);
+            Type type = typeof(PdfDocumentTests);
             return type.Assembly.GetManifestResourceStream(type, name);
         }
     }

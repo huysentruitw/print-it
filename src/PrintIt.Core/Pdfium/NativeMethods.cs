@@ -17,7 +17,7 @@ namespace PrintIt.Core.Pdfium
         {
             lock (SyncRoot)
             {
-                Imports.FPDF_InitLibrary();;
+                Imports.FPDF_InitLibrary();
             }
         }
 
@@ -28,7 +28,7 @@ namespace PrintIt.Core.Pdfium
                 Imports.FPDF_DestroyLibrary();
             }
         }
-        
+
         public static DocumentHandle LoadDocument(byte[] buffer, int size, string password)
         {
             lock (SyncRoot)
@@ -104,12 +104,12 @@ namespace PrintIt.Core.Pdfium
             DisableImageAntiAliasing = 0x2000,
             DisablePathAntiAliasing = 0x4000,
         }
-        
+
         [SecurityCritical]
-        // ReSharper disable once ClassNeverInstantiated.Global
         public sealed class DocumentHandle : SafeHandleZeroOrMinusOneIsInvalid
         {
-            public DocumentHandle() : base(true)
+            public DocumentHandle()
+                : base(true)
             {
             }
 
@@ -122,19 +122,19 @@ namespace PrintIt.Core.Pdfium
                 {
                     Imports.FPDF_CloseDocument(handle);
                 }
-                
+
                 return true;
             }
         }
 
         [SecurityCritical]
-        // ReSharper disable once ClassNeverInstantiated.Global
         public sealed class PageHandle : SafeHandleZeroOrMinusOneIsInvalid
         {
-            public PageHandle() : base(true)
+            public PageHandle()
+                : base(true)
             {
             }
-            
+
             [SecurityCritical]
             [ResourceExposure(ResourceScope.Machine)]
             [ResourceConsumption(ResourceScope.Machine)]
@@ -144,46 +144,45 @@ namespace PrintIt.Core.Pdfium
                 {
                     Imports.FPDF_ClosePage(handle);
                 }
-                
+
                 return true;
             }
         }
-        
-        [SuppressMessage("ReSharper", "IdentifierTypo")]
+
         private static class Imports
         {
             private const string DllName = "pdfium.dll";
             private const CharSet PdfiumCharSet = CharSet.Ansi;
             private const CallingConvention PdfiumCallingConvention = CallingConvention.StdCall;
-            
+
             [DllImport(DllName)]
             public static extern void FPDF_InitLibrary();
 
             [DllImport(DllName)]
             public static extern void FPDF_DestroyLibrary();
-            
+
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention, CharSet = PdfiumCharSet)]
             public static extern DocumentHandle FPDF_LoadMemDocument(byte[] buffer, int size, string password);
-            
+
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern int FPDF_GetPageCount(DocumentHandle documentHandle);
 
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern PageHandle FPDF_LoadPage(DocumentHandle documentHandle, int pageIndex);
-            
+
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern void FPDF_CloseDocument(IntPtr documentHandle);
 
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern float FPDF_GetPageWidthF(PageHandle pageHandle);
-            
+
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern float FPDF_GetPageHeightF(PageHandle pageHandle);
 
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern void FPDF_RenderPage(IntPtr hdc, PageHandle pageHandle, int startX, int startY,
                 int sizeX, int sizeY, int pageOrientation, int flags);
-            
+
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern void FPDF_ClosePage(IntPtr pageHandle);
         }

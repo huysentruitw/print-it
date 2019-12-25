@@ -17,7 +17,7 @@ namespace PrintIt.Core.Pdfium
         {
             _pageHandle.Dispose();
         }
-        
+
         public PdfDocument Document { get; }
 
         public SizeF SizeInInch
@@ -33,7 +33,7 @@ namespace PrintIt.Core.Pdfium
         public void RenderTo(Graphics graphics, bool maintainAspectRatio = true,  bool allowUpscaling = false, bool center = true)
         {
             bool rotate = false;
-            var pageSize = SizeInInch;
+            SizeF pageSize = SizeInInch;
 
             var pageAspect = pageSize.Width / pageSize.Height;
             var destinationAspect = graphics.VisibleClipBounds.Width / graphics.VisibleClipBounds.Height;
@@ -46,7 +46,7 @@ namespace PrintIt.Core.Pdfium
 
             var pageWidthInPixels = (rotate ? pageSize.Height : pageSize.Width) * graphics.DpiX;
             var pageHeightInPixels = (rotate ? pageSize.Width : pageSize.Height) * graphics.DpiY;
-            
+
             var scaleX = graphics.VisibleClipBounds.Width / pageWidthInPixels;
             var scaleY = graphics.VisibleClipBounds.Height / pageHeightInPixels;
 
@@ -71,7 +71,7 @@ namespace PrintIt.Core.Pdfium
                 offsetX = (graphics.VisibleClipBounds.Width - destinationWidth) / 2.0f;
                 offsetY = (graphics.VisibleClipBounds.Height - destinationHeight) / 2.0f;
             }
-            
+
             var boundingBox = new Rectangle(
                 x: (int)(graphics.VisibleClipBounds.X + offsetX),
                 y: (int)(graphics.VisibleClipBounds.Y + offsetY),

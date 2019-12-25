@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Xunit;
 
 namespace PrintIt.Core.Tests
@@ -10,10 +11,10 @@ namespace PrintIt.Core.Tests
         {
             // Arrange
             var printerService = new PrinterService();
-            
+
             // Act
-            var installedPrinters = printerService.GetInstalledPrinters();
-            
+            string[] installedPrinters = printerService.GetInstalledPrinters();
+
             // Assert
             installedPrinters.Should().HaveCountGreaterOrEqualTo(1);
         }

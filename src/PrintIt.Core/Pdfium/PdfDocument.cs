@@ -14,17 +14,15 @@ namespace PrintIt.Core.Pdfium
 
         public static InMemoryPdfDocument Open(Stream stream, string password = null)
         {
-            password = password ?? string.Empty;
+            password ??= string.Empty;
 
-            using (var memoryStream = new MemoryStream())
-            {
-                stream.CopyTo(memoryStream);
-                var buffer = memoryStream.ToArray();
-                var documentHandle = NativeMethods.LoadDocument(buffer, buffer.Length, password);
-                return new InMemoryPdfDocument(documentHandle, buffer);
-            }
+            using var memoryStream = new MemoryStream();
+            stream.CopyTo(memoryStream);
+            byte[] buffer = memoryStream.ToArray();
+            NativeMethods.DocumentHandle documentHandle = NativeMethods.LoadDocument(buffer, buffer.Length, password);
+            return new InMemoryPdfDocument(documentHandle, buffer);
         }
-        
+
         public virtual void Dispose()
         {
             _documentHandle.Dispose();
@@ -34,7 +32,7 @@ namespace PrintIt.Core.Pdfium
 
         public PdfPage OpenPage(int pageIndex)
         {
-            var pageHandle = NativeMethods.LoadPage(_documentHandle, pageIndex);
+            NativeMethods.PageHandle pageHandle = NativeMethods.LoadPage(_documentHandle, pageIndex);
 
             if (pageHandle.IsInvalid)
             {
