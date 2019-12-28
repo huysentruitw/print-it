@@ -19,8 +19,16 @@ namespace PrintIt.ServiceHost.Controllers
         [Route("list")]
         public IActionResult ListPrinters()
         {
-            var installedPrinters = _printerService.GetInstalledPrinters(); 
+            string[] installedPrinters = _printerService.GetInstalledPrinters(); 
             return Ok(installedPrinters);
+        }
+
+        [HttpPost]
+        [Route("install")]
+        public IActionResult InstallPrinter([FromQuery] string printerPath)
+        {
+            _printerService.InstallPrinter(printerPath);
+            return Ok();
         }
     }
 }
