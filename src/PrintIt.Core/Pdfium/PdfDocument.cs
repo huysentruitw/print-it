@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace PrintIt.Core.Pdfium
 {
@@ -14,17 +15,17 @@ namespace PrintIt.Core.Pdfium
 
         public static InMemoryPdfDocument Open(Stream stream, string password = null)
         {
-            password ??= string.Empty;
-
             using var memoryStream = new MemoryStream();
             stream.CopyTo(memoryStream);
             byte[] buffer = memoryStream.ToArray();
-            NativeMethods.DocumentHandle documentHandle = NativeMethods.LoadDocument(buffer, buffer.Length, password);
-            return new InMemoryPdfDocument(documentHandle, buffer);
+            var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            NativeMethods.DocumentHandle documentHandle = NativeMethods.LoadDocument(handle.AddrOfPinnedObject(), buffer.Length, password);
+            return new InMemoryPdfDocument(documentHandle, handle);
         }
 
         public virtual void Dispose()
         {
+            _documentHandle.Close();
             _documentHandle.Dispose();
         }
 

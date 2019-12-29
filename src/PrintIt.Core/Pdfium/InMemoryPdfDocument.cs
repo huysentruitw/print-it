@@ -1,15 +1,24 @@
-﻿using System;
+using System;
+using System.Runtime.InteropServices;
 
 namespace PrintIt.Core.Pdfium
 {
     public sealed class InMemoryPdfDocument : PdfDocument
     {
-        private readonly byte[] _buffer;
+        private readonly GCHandle _handle;
 
-        internal InMemoryPdfDocument(NativeMethods.DocumentHandle documentHandle, byte[] buffer)
+        internal InMemoryPdfDocument(NativeMethods.DocumentHandle documentHandle, GCHandle handle)
             : base(documentHandle)
         {
-            _buffer = buffer;
+            _handle = handle;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _handle.Free();
+            GC.SuppressFinalize(true);
         }
     }
 }

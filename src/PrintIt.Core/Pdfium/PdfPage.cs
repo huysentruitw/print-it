@@ -15,6 +15,7 @@ namespace PrintIt.Core.Pdfium
 
         public void Dispose()
         {
+            _pageHandle.Close();
             _pageHandle.Dispose();
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -29,7 +29,7 @@ namespace PrintIt.Core.Pdfium
             }
         }
 
-        public static DocumentHandle LoadDocument(byte[] buffer, int size, string password)
+        public static DocumentHandle LoadDocument(IntPtr buffer, int size, string password)
         {
             lock (SyncRoot)
             {
@@ -162,7 +162,7 @@ namespace PrintIt.Core.Pdfium
             public static extern void FPDF_DestroyLibrary();
 
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention, CharSet = PdfiumCharSet)]
-            public static extern DocumentHandle FPDF_LoadMemDocument(byte[] buffer, int size, string password);
+            public static extern DocumentHandle FPDF_LoadMemDocument(IntPtr buffer, int size, string password);
 
             [DllImport(DllName, CallingConvention = PdfiumCallingConvention)]
             public static extern int FPDF_GetPageCount(DocumentHandle documentHandle);
