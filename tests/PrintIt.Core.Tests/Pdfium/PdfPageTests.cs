@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -55,7 +55,7 @@ namespace PrintIt.Core.Tests.Pdfium
             using (var graphics = Graphics.FromImage(bitmap))
             {
                 graphics.Clear(Color.White);
-                page.RenderTo(graphics);
+                page.RenderTo(graphics, graphics.VisibleClipBounds);
             }
 
             // Assert
@@ -84,7 +84,7 @@ namespace PrintIt.Core.Tests.Pdfium
 
         private static Stream GetEmbeddedResourceStream(string name)
         {
-            Type type = typeof(PdfDocumentTests);
+            Type type = typeof(PdfPageTests);
             return type.Assembly.GetManifestResourceStream(type, name);
         }
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 
 namespace PrintIt.Core.Pdfium
@@ -31,13 +31,13 @@ namespace PrintIt.Core.Pdfium
             }
         }
 
-        public void RenderTo(Graphics graphics, bool maintainAspectRatio = true,  bool allowUpscaling = false, bool center = true)
+        public void RenderTo(Graphics graphics, RectangleF destinationRectInPixels, bool maintainAspectRatio = true,  bool allowUpscaling = false, bool center = true)
         {
             bool rotate = false;
             SizeF pageSize = SizeInInch;
 
             var pageAspect = pageSize.Width / pageSize.Height;
-            var destinationAspect = graphics.VisibleClipBounds.Width / graphics.VisibleClipBounds.Height;
+            var destinationAspect = destinationRectInPixels.Width / destinationRectInPixels.Height;
 
             if ((pageAspect >= 1.0f && destinationAspect < 1.0f) ||
                 (pageAspect < 1.0f && destinationAspect >= 1.0f))
@@ -48,8 +48,8 @@ namespace PrintIt.Core.Pdfium
             var pageWidthInPixels = (rotate ? pageSize.Height : pageSize.Width) * graphics.DpiX;
             var pageHeightInPixels = (rotate ? pageSize.Width : pageSize.Height) * graphics.DpiY;
 
-            var scaleX = graphics.VisibleClipBounds.Width / pageWidthInPixels;
-            var scaleY = graphics.VisibleClipBounds.Height / pageHeightInPixels;
+            var scaleX = destinationRectInPixels.Width / pageWidthInPixels;
+            var scaleY = destinationRectInPixels.Height / pageHeightInPixels;
 
             if (!allowUpscaling)
             {
@@ -62,20 +62,20 @@ namespace PrintIt.Core.Pdfium
                 scaleX = scaleY = Math.Min(scaleX, scaleY);
             }
 
-            var destinationWidth = Math.Min(pageWidthInPixels * scaleX, graphics.VisibleClipBounds.Width);
-            var destinationHeight = Math.Min(pageHeightInPixels * scaleY, graphics.VisibleClipBounds.Height);
+            var destinationWidth = Math.Min(pageWidthInPixels * scaleX, destinationRectInPixels.Width);
+            var destinationHeight = Math.Min(pageHeightInPixels * scaleY, destinationRectInPixels.Height);
 
             var offsetX = 0.0f;
             var offsetY = 0.0f;
             if (center)
             {
-                offsetX = (graphics.VisibleClipBounds.Width - destinationWidth) / 2.0f;
-                offsetY = (graphics.VisibleClipBounds.Height - destinationHeight) / 2.0f;
+                offsetX = (destinationRectInPixels.Width - destinationWidth) / 2.0f;
+                offsetY = (destinationRectInPixels.Height - destinationHeight) / 2.0f;
             }
 
             var boundingBox = new Rectangle(
-                x: (int)(graphics.VisibleClipBounds.X + offsetX),
-                y: (int)(graphics.VisibleClipBounds.Y + offsetY),
+                x: (int)(destinationRectInPixels.X + offsetX),
+                y: (int)(destinationRectInPixels.Y + offsetY),
                 width: (int)destinationWidth,
                 height: (int)destinationHeight);
 
