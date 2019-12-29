@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -60,6 +61,7 @@ namespace PrintIt.Core
         CommandExecutionResult Execute(string fileName, params string[] arguments);
     }
 
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API")]
     public sealed class CommandExecutionResult
     {
         internal CommandExecutionResult(string[] output, int exitCode)
