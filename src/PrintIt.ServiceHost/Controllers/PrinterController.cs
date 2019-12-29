@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PrintIt.Core;
 
 namespace PrintIt.ServiceHost.Controllers

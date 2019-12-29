@@ -39,4 +39,11 @@
     <EmbeddedResource Include="Pdfium\dummy-snapshot.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\..\pdfium-binary\pdfium.dll">
+      <Link>pdfium.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

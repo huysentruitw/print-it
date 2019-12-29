@@ -25,4 +25,11 @@
       <ProjectReference Include="..\PrintIt.Core\PrintIt.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="..\..\pdfium-binary\pdfium.dll">
+        <Link>pdfium.dll</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
