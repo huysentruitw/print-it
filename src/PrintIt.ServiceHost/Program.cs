@@ -54,7 +54,10 @@ namespace PrintIt.ServiceHost
                         .AddFilter("Microsoft.AspNetCore.Authentication", LogLevel.Warning)
                         .AddFilter("System", LogLevel.Warning)
                         .AddConsole()
-                        .AddEventLog(settings => { settings.SourceName = "PrintIt"; });
+                        .AddEventLog(settings =>
+                        {
+                            settings.SourceName = "PrintIt";
+                        });
                 })
                 .UseStartup<Startup>()
                 .UseUrls(configuration.GetValue<string>("Host:Urls"))
