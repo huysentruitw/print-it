@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 
 namespace PrintIt.Core.Pdfium
 {
     public sealed class PdfLibrary : IDisposable
     {
         private static readonly object SyncRoot = new object();
+#pragma warning disable IDE1006 // Naming Styles
         private static PdfLibrary _library;
+#pragma warning restore IDE1006 // Naming Styles
 
         public static void EnsureInitialized()
         {
