@@ -42,7 +42,7 @@
   <ItemGroup>
     <Content Include="..\..\pdfium-binary\pdfium.dll">
       <Link>pdfium.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
