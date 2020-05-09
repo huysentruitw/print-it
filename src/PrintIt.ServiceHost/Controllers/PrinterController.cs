@@ -4,7 +4,7 @@ using PrintIt.Core;
 namespace PrintIt.ServiceHost.Controllers
 {
     [ApiController]
-    [Route("api/printers")]
+    [Route("printers")]
     public sealed class PrinterController : ControllerBase
     {
         private readonly IPrinterService _printerService;
@@ -18,7 +18,7 @@ namespace PrintIt.ServiceHost.Controllers
         [Route("list")]
         public IActionResult ListPrinters()
         {
-            string[] installedPrinters = _printerService.GetInstalledPrinters(); 
+            string[] installedPrinters = _printerService.GetInstalledPrinters();
             return Ok(installedPrinters);
         }
 
