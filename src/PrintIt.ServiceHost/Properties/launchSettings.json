@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PrintIt.ServiceHost": {
+      "commandName": "Project",
+      "commandLineArgs": "--console"
+    }
+  }
+}
