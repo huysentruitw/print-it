@@ -4,7 +4,7 @@ Windows service for printing PDF files to a local or network printer in the back
 
 ## API
 
-By default, _PrintIt.ServiceHost_ is listening on http://localhost:7500. The endpoint is configurable in _appsettings.json_.
+By default, _PrintIt.ServiceHost_ is listening on http://localhost:7000. The endpoint is configurable in _appsettings.json_.
 
 #### [GET] /api/printers/list
 
