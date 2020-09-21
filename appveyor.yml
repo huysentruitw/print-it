@@ -1,0 +1,38 @@
+pull_requests:
+  do_not_increment_build_number: true
+
+image: Visual Studio 2019
+configuration: Release
+
+install:
+  - cmd: dotnet tool install -g GitVersion.Tool
+
+assembly_info:
+  patch: false
+
+before_build:
+  - nuget restore
+  - ps: $NuGetVersion = (cmd /c dotnet gitversion /output json /showvariable NuGetVersion 2`>`&1)
+  - ps: nuget install OpenCover -OutputDirectory packages -Version 4.7.922
+
+build_script:
+  - ps: dotnet build PrintIt.sln --configuration Release /p:Version=$NuGetVersion
+
+test_script:
+- ps: >-
+    .\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe -register -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test --configuration Release --no-build /p:GeneratePackageOnBuild=false /p:DebugType=full --logger:trx;LogFileName=results.trx" -output:"coverage.xml" -excludebyattribute:*.ExcludeFromCodeCoverageAttribute -hideskipped:attribute -filter:"+[PrintIt*]* -[PrintIt.*.Tests*]* -[PrintIt.Tests*]*"
+
+    choco install codecov
+
+    codecov.exe -f "./coverage.xml"
+
+artifacts:
+  - path: '**\PrintIt*.nupkg'
+
+deploy:
+- provider: NuGet
+  api_key:
+    secure: WnjPTFYHACjYXLQ//WRAETTz8xrlnoWO8HwN40qxVioihP/u+apok5Zg43iLggqA
+  skip_symbols: true
+  on:
+    branch: /master|develop/
