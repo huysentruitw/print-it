@@ -1,0 +1,43 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Fetch all history for all tags and branches
+      run: git fetch --prune --unshallow
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.2
+      with:
+          versionSpec: '5.2.x'
+    - name: Use GitVersion
+      id: gitversion # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v0.9.2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore /p:Version=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+    - name: Test
+      run: dotnet test --configuration Release --no-restore --verbosity normal
+    - name: Publish
+      if: github.ref == 'refs/heads/master'
+      run: dotnet publish src/PrintIt.ServiceHost --configuration Release --no-restore --output ./release /p:Version=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+    - name: Upload a Build Artifact
+      if: github.ref == 'refs/heads/master'
+      uses: actions/upload-artifact@v2.1.4
+      with:
+        name: printit-artifact
+        path: ./release
