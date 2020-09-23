@@ -19,9 +19,14 @@ jobs:
         dotnet-version: 3.1.301
     - name: Install dependencies
       run: dotnet restore
+           dotnet tool install -g GitVersion.Tool
+    - name: GitVersion
+      uses: Amadevus/pwsh-script@v2.0.0
+      with:
+        script: $NuGetVersion = (cmd /c dotnet gitversion /output json /showvariable NuGetVersion 2`>`&1)
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore /p:Version=$NuGetVersion
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --configuration Release --no-restore --verbosity normal
     - name: Publish
-      run: dotnet publish src/PrintIt.ServiceHost --no-restore --no-build --output ./release
+      run: dotnet publish src/PrintIt.ServiceHost --configuration Release --no-restore --output ./release /p:Version=$NuGetVersion
