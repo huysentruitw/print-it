@@ -31,7 +31,6 @@ jobs:
     - name: Test
       run: dotnet test --configuration Release --no-restore --verbosity normal
     - name: Publish
-      if: github.ref == 'refs/heads/master'
       run: dotnet publish src/PrintIt.ServiceHost --configuration Release --no-restore --output ./release /p:Version=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Create Archive
       uses: Amadevus/pwsh-script@v2.0.0
