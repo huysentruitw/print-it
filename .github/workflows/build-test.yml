@@ -2,7 +2,7 @@ name: .NET Core
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ develop ]
   pull_request:
     branches: [ develop ]
 
@@ -32,12 +32,3 @@ jobs:
       run: dotnet build --configuration Release --no-restore /p:Version=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Test
       run: dotnet test --configuration Release --no-restore --verbosity normal
-    - name: Publish
-      if: github.ref == 'refs/heads/master'
-      run: dotnet publish src/PrintIt.ServiceHost --configuration Release --no-restore --output ./release /p:Version=${{ steps.gitversion.outputs.nuGetVersionV2 }}
-    - name: Upload a Build Artifact
-      if: github.ref == 'refs/heads/master'
-      uses: actions/upload-artifact@v2.1.4
-      with:
-        name: printit-artifact
-        path: ./release
