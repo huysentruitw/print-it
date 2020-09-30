@@ -14,6 +14,15 @@ List all available printers on the system.
 
 Install the network printer with the UNC-path `\\REMOTE_PC_NAME\PRINTER-NAME`. 
 
+#### [POST] /api/print/from-pdf
+
+To print a PDF on a given printer, post a multipart form to this end-point with the following fields:
+
+Field Name   | Content
+------------ | -----------------
+PdfFile      | The PDF file to print (Content-type: application/pdf)
+PrinterPath  | The UNC-path of the printer to send the PDF to
+
 ## PDFium
 
 This project uses the [PDFium library](https://pdfium.googlesource.com/) for rendering the PDF file which is licensed under Apache 2.0, see [LICENSE](pdfium-binary/LICENSE).
