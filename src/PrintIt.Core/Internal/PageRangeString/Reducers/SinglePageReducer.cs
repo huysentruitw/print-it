@@ -15,6 +15,13 @@ namespace PrintIt.Core.Internal.PageRangeString.Reducers
                     var pageNumber = enumerator.Current as PageNumberToken;
                     Validate(pageNumber.PageNumber, totalNumberOfPages);
                     yield return new SinglePageNode(pageNumber.PageNumber);
+
+                    // The next token should be a separator or end of sequence
+                    var nextToken = GetNext(enumerator);
+                    if (!(nextToken is SeparatorToken || nextToken is EndToken))
+                    {
+                        throw new PageRangeStringFormatException($"Expected separator or end token instead of {nextToken}");
+                    }
                 }
                 else
                 {
@@ -22,6 +29,9 @@ namespace PrintIt.Core.Internal.PageRangeString.Reducers
                 }
             }
         }
+
+        private static object GetNext(IEnumerator<object> enumerator)
+            => enumerator.MoveNext() ? enumerator.Current : null;
 
         private static void Validate(int pageNumber, int totalNumberOfPages)
         {

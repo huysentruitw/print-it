@@ -145,6 +145,7 @@ namespace PrintIt.Core.Tests.Internal
         [Theory]
         [InlineData("8,k", "Invalid character found in source: k")]
         [InlineData("8--8", "Expected separator or end token instead of -")]
+        [InlineData("4 8", "Expected separator or end token instead of 8")]
         [InlineData("8-8,1-2-4", "Expected separator or end token instead of -")]
         [InlineData("abc", "Invalid character found in source: a")]
         public void Create_InvalidPageRangeString_ShouldThrowPageRangeFormatException(string pageString, string expectedMessage)
