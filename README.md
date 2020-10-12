@@ -18,10 +18,11 @@ Install the network printer with the UNC-path `\\REMOTE_PC_NAME\PRINTER-NAME`.
 
 To print a PDF on a given printer, post a multipart form to this end-point with the following fields:
 
-Field Name   | Content
------------- | -----------------
-PdfFile      | The PDF file to print (Content-type: application/pdf)
-PrinterPath  | The UNC-path of the printer to send the PDF to
+Field Name   | Required           | Content
+------------ | ------------------ | ---------
+PdfFile      | :heavy_check_mark: | The PDF file to print (Content-type: application/pdf)
+PrinterPath  | :heavy_check_mark: | The UNC-path of the printer to send the PDF to
+PageRange    |                    | An optional page range string (f.e. "1-5", "1, 3", "1, 4-8", "2-", "-5")
 
 ## PDFium
 
