@@ -74,14 +74,4 @@ namespace PrintIt.Core.Internal.PageRangeString.Reducers
 
         public int To { get; }
     }
-
-    internal sealed class OpenPageRangeTillEndNode
-    {
-        public OpenPageRangeTillEndNode(int from)
-        {
-            From = from;
-        }
-
-        public int From { get; }
-    }
 }
