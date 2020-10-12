@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.WindowsServices;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,13 +10,13 @@ namespace PrintIt.ServiceHost
     internal sealed class CustomWebHostService : WebHostService
     {
         private readonly ILogger _logger;
-        
+
         public CustomWebHostService(IWebHost host)
             : base(host)
         {
             _logger = host.Services.GetRequiredService<ILogger<CustomWebHostService>>();
         }
-        
+
         protected override void OnStarting(string[] args)
         {
             _logger.LogInformation("PrintIt Starting...");

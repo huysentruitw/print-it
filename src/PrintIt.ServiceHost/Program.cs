@@ -46,7 +46,7 @@ namespace PrintIt.ServiceHost
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
-            
+
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureLogging(logging =>
                 {

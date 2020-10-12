@@ -31,7 +31,7 @@ namespace PrintIt.Core.Pdfium
             }
         }
 
-        public void RenderTo(Graphics graphics, RectangleF destinationRectInPixels, bool maintainAspectRatio = true,  bool allowUpscaling = false, bool center = true)
+        public void RenderTo(Graphics graphics, RectangleF destinationRectInPixels, bool maintainAspectRatio = true, bool allowUpscaling = false, bool center = true)
         {
             bool rotate = false;
             SizeF pageSize = SizeInInch;
