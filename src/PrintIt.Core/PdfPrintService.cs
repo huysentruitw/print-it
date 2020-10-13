@@ -1,12 +1,15 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using PrintIt.Core.Internal;
 using PrintIt.Core.Pdfium;
 
 namespace PrintIt.Core
 {
+    [ExcludeFromCodeCoverage]
     internal sealed class PdfPrintService : IPdfPrintService
     {
         private readonly ILogger<PdfPrintService> _logger;
@@ -16,7 +19,7 @@ namespace PrintIt.Core
             _logger = logger;
         }
 
-        public void Print(Stream pdfStream, string printerName)
+        public void Print(Stream pdfStream, string printerName, string pageRange = null)
         {
             if (pdfStream == null)
                 throw new ArgumentNullException(nameof(pdfStream));
@@ -27,7 +30,7 @@ namespace PrintIt.Core
 
             using var printDocument = new PrintDocument();
             printDocument.PrinterSettings.PrinterName = printerName;
-            var state = new PrintState(document);
+            PrintState state = PrintStateFactory.Create(document, pageRange);
             printDocument.PrintPage += (_, e) => PrintDocumentOnPrintPage(e, state);
             printDocument.Print();
         }
@@ -43,35 +46,10 @@ namespace PrintIt.Core
             page.RenderTo(e.Graphics, destinationRect);
             e.HasMorePages = state.AdvanceToNextPage();
         }
-
-        private sealed class PrintState
-        {
-            private readonly int _pageCount;
-
-            public PrintState(PdfDocument document)
-            {
-                Document = document;
-                _pageCount = document.PageCount;
-                CurrentPageIndex = 0;
-            }
-
-            public PdfDocument Document { get; }
-
-            public int CurrentPageIndex { get; private set; }
-
-            public bool AdvanceToNextPage()
-            {
-                if (CurrentPageIndex >= _pageCount)
-                    return false;
-
-                CurrentPageIndex++;
-                return CurrentPageIndex < _pageCount;
-            }
-        }
     }
 
     public interface IPdfPrintService
     {
-        void Print(Stream pdfStream, string printerName);
+        void Print(Stream pdfStream, string printerName, string pageRange = null);
     }
 }

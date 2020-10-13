@@ -12,7 +12,7 @@ namespace PrintIt.ServiceHost
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddPrintIt();
-            
+
             services.AddRouting();
             services.AddControllers();
         }
