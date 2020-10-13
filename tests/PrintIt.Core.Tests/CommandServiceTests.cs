@@ -12,7 +12,7 @@ namespace PrintIt.Core.Tests
         public void Execute_BasicCommand_ShouldReturnOutput()
         {
             // Arrange
-            var commandService = new CommandService(new Mock<ILogger<CommandService>>().Object);
+            var commandService = new CommandService(Mock.Of<ILogger<CommandService>>());
             var fileName = $@"{Environment.GetFolderPath(Environment.SpecialFolder.System)}\ipconfig.exe";
 
             // Act
@@ -27,7 +27,7 @@ namespace PrintIt.Core.Tests
         public void Execute_CommandWithArguments_ShouldReturnCorrectOutput()
         {
             // Arrange
-            var commandService = new CommandService(new Mock<ILogger<CommandService>>().Object);
+            var commandService = new CommandService(Mock.Of<ILogger<CommandService>>());
             var fileName = $@"{Environment.GetFolderPath(Environment.SpecialFolder.System)}\whoami.exe";
             var arguments = new[] { "/user" };
 
@@ -43,7 +43,7 @@ namespace PrintIt.Core.Tests
         public void Execute_ErrorInCommand_ShouldNotBeSuccessful()
         {
             // Arrange
-            var commandService = new CommandService(new Mock<ILogger<CommandService>>().Object);
+            var commandService = new CommandService(Mock.Of<ILogger<CommandService>>());
             var fileName = $@"{Environment.GetFolderPath(Environment.SpecialFolder.System)}\whoami.exe";
             var arguments = new[] { "blabla" };
 
@@ -54,6 +54,21 @@ namespace PrintIt.Core.Tests
             executionResult.Success.Should().BeFalse();
             var output = string.Join(Environment.NewLine, executionResult.Output);
             output.Should().Contain("blabla");
+        }
+
+        [Fact]
+        public void Execute_ProcessStartReturnsNull_ShouldNotBeSuccessful()
+        {
+            // Arrange
+            var commandService = new CommandService(_ => null, Mock.Of<ILogger<CommandService>>());
+            var fileName = $@"{Environment.GetFolderPath(Environment.SpecialFolder.System)}\ipconfig.exe";
+
+            // Act
+            CommandExecutionResult executionResult = commandService.Execute(fileName);
+
+            // Assert
+            executionResult.Success.Should().BeFalse();
+            executionResult.ExitCode.Should().Be(-1);
         }
     }
 }

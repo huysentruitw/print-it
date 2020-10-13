@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +23,7 @@ namespace PrintIt.ServiceHost.Controllers
         public async Task<IActionResult> PrintFromPdf([FromForm] PrintFromTemplateRequest request)
         {
             await using Stream pdfStream = request.PdfFile.OpenReadStream();
-            _pdfPrintService.Print(pdfStream, request.PrinterPath);
+            _pdfPrintService.Print(pdfStream, request.PrinterPath, request.PageRange);
             return Ok();
         }
     }
@@ -35,5 +35,7 @@ namespace PrintIt.ServiceHost.Controllers
 
         [Required]
         public string PrinterPath { get; set; }
+
+        public string PageRange { get; set; }
     }
 }

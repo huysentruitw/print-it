@@ -5,7 +5,10 @@ namespace PrintIt.Core.Pdfium
     public sealed class PdfLibrary : IDisposable
     {
         private static readonly object SyncRoot = new object();
+
 #pragma warning disable IDE1006 // Naming Styles
+
+        // ReSharper disable once InconsistentNaming
         private static PdfLibrary _library;
 #pragma warning restore IDE1006 // Naming Styles
 
@@ -13,7 +16,7 @@ namespace PrintIt.Core.Pdfium
         {
             lock (SyncRoot)
             {
-                _library = _library ?? new PdfLibrary();
+                _library ??= new PdfLibrary();
             }
         }
 

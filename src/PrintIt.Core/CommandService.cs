@@ -10,10 +10,20 @@ namespace PrintIt.Core
 {
     internal sealed class CommandService : ICommandService
     {
+        private readonly Func<ProcessStartInfo, Process> _startProcess;
         private readonly ILogger<CommandService> _logger;
 
         public CommandService(ILogger<CommandService> logger)
+            : this(Process.Start, logger)
         {
+        }
+
+        [ExcludeFromCodeCoverage]
+        internal CommandService(
+            Func<ProcessStartInfo, Process> startProcess,
+            ILogger<CommandService> logger)
+        {
+            _startProcess = startProcess ?? throw new ArgumentNullException(nameof(_startProcess));
             _logger = logger;
         }
 
@@ -29,7 +39,7 @@ namespace PrintIt.Core
                 RedirectStandardError = true,
             };
 
-            using var process = Process.Start(startInfo);
+            using var process = _startProcess(startInfo);
 
             if (process == null)
             {
