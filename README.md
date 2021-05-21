@@ -2,6 +2,14 @@
 
 Windows service for printing PDF files to a local or network printer in the background.
 
+## Usage instructions
+
+1. Download the [latest release](https://github.com/huysentruitw/print-it/releases/latest)
+2. Extract the package to f.e. C:\print-it
+3. Create print-it as a Windows service from an elevated command line: `sc create "PrintIt" binPath="C:\print-it\PrintIt.ServiceHost.exe" start=auto`
+4. Start the service from the command line: `sc start PrintIt`
+5. Check if the service is listening on port 7000 by running: `netstat -a | find ":7000"`
+
 ## API
 
 By default, _PrintIt.ServiceHost_ is listening on http://localhost:7000. The endpoint is configurable in _appsettings.json_.
