@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PrintIt.Core;
 
-namespace PrintIt.ServiceHost.Controllers
+namespace PrintIt.WebHost.Controllerrs
 {
     [ApiController]
-    [Route("api/print")]
+    [Route("print")]
     public class PrintController : ControllerBase
     {
         private readonly IPdfPrintService _pdfPrintService;
@@ -38,4 +38,5 @@ namespace PrintIt.ServiceHost.Controllers
 
         public string PageRange { get; set; }
     }
+
 }

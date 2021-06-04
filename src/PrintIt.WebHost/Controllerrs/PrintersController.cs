@@ -1,15 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using PrintIt.Core;
 
-namespace PrintIt.ServiceHost.Controllers
+namespace PrintIt.WebHost.Controllerrs
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("api/printers")]
-    public sealed class PrinterController : ControllerBase
+    public class PrintersController : ControllerBase
     {
+
         private readonly IPrinterService _printerService;
 
-        public PrinterController(IPrinterService printerService)
+        public PrintersController(IPrinterService printerService)
         {
             _printerService = printerService;
         }
@@ -30,4 +31,5 @@ namespace PrintIt.ServiceHost.Controllers
             return Ok();
         }
     }
+
 }
