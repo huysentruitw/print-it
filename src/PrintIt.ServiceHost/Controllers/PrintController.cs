@@ -23,7 +23,10 @@ namespace PrintIt.ServiceHost.Controllers
         public async Task<IActionResult> PrintFromPdf([FromForm] PrintFromTemplateRequest request)
         {
             await using Stream pdfStream = request.PdfFile.OpenReadStream();
-            _pdfPrintService.Print(pdfStream, request.PrinterPath, request.PageRange);
+            _pdfPrintService.Print(pdfStream,
+                printerName: request.PrinterPath,
+                pageRange: request.PageRange,
+                numberOfCopies: request.Copies ?? 1);
             return Ok();
         }
     }
@@ -37,5 +40,7 @@ namespace PrintIt.ServiceHost.Controllers
         public string PrinterPath { get; set; }
 
         public string PageRange { get; set; }
+
+        public int? Copies { get; set; }
     }
 }
