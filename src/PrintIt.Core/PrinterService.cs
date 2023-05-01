@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Printing;
 using System.IO;
@@ -17,6 +19,21 @@ namespace PrintIt.Core
 
         public string[] GetInstalledPrinters()
             => PrinterSettings.InstalledPrinters.Cast<string>().ToArray();
+
+        public string[] GetPrinterPageSources(string printerPath)
+        {
+            var allSourceNames = new List<string>();
+            var settings = new PrinterSettings
+            {
+                PrinterName = printerPath,
+            };
+            foreach (PaperSource paperSource in settings.PaperSources)
+            {
+                allSourceNames.Add(paperSource.SourceName);
+            }
+
+            return allSourceNames.ToArray();
+        }
 
         public void InstallPrinter(string printerPath)
         {
@@ -38,6 +55,8 @@ namespace PrintIt.Core
     public interface IPrinterService
     {
         string[] GetInstalledPrinters();
+
+        string[] GetPrinterPageSources(string printerPath);
 
         void InstallPrinter(string printerPath);
     }

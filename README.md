@@ -18,6 +18,10 @@ By default, _PrintIt.ServiceHost_ is listening on http://localhost:7000. The end
 
 List all available printers on the system.
 
+#### [GET] /printers/paperSources?printerPath=\\\\REMOTE_PC_NAME\\PRINTER-NAME
+
+List all paper sources(trays) on the printer with the UNC-path `\\REMOTE_PC_NAME\PRINTER-NAME`.
+
 #### [POST] /printers/install?printerPath=\\\\REMOTE_PC_NAME\\PRINTER-NAME
 
 Install the network printer with the UNC-path `\\REMOTE_PC_NAME\PRINTER-NAME`. 
