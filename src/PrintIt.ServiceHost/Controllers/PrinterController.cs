@@ -25,12 +25,19 @@ namespace PrintIt.ServiceHost.Controllers
 
         [HttpGet]
         [Route("paperSources")]
-        public IActionResult ListPrinterDetails([FromQuery] string printerPath)
+        public IActionResult ListPaperSources([FromQuery] string printerPath)
         {
-            string[] printerSettings = _printerService.GetPrinterPageSources(printerPath);
-            return Ok(printerSettings);
+            string[] paperSources = _printerService.GetPrinterPageSources(printerPath);
+            return Ok(paperSources);
         }
 
+        [HttpGet]
+        [Route("paperSizes")]
+        public IActionResult ListPaperSizes([FromQuery] string printerPath)
+        {
+            string[] paperSizes = _printerService.GetPrinterPageSizes(printerPath);
+            return Ok(paperSizes);
+        }
 
         [HttpPost]
         [Route("install")]
