@@ -19,7 +19,7 @@ namespace PrintIt.Core
             _logger = logger;
         }
 
-        public void Print(Stream pdfStream, string printerName, string pageRange = null, int numberOfCopies = 1)
+        public void Print(Stream pdfStream, string printerName, string pageRange = null, int numberOfCopies = 1, string paperSource = null, string paperSize = null)
         {
             if (pdfStream == null)
                 throw new ArgumentNullException(nameof(pdfStream));
@@ -31,6 +31,49 @@ namespace PrintIt.Core
             using var printDocument = new PrintDocument();
             printDocument.PrinterSettings.PrinterName = printerName;
             printDocument.PrinterSettings.Copies = (short)Math.Clamp(numberOfCopies, 1, short.MaxValue);
+
+            if (paperSource != null)
+            {
+                bool paperSourceSet = false;
+                var settings = new PrinterSettings
+                {
+                    PrinterName = printerName,
+                };
+                foreach (PaperSource source in printDocument.PrinterSettings.PaperSources)
+                {
+                    if (source != null && source.SourceName == paperSource)
+                    {
+                        printDocument.DefaultPageSettings.PaperSource = source;
+                        paperSourceSet = true;
+                        break;
+                    }
+                }
+
+                if (!paperSourceSet)
+                {
+                    throw new ArgumentException($"paperSource: {paperSource} was not valid for printerName: {printerName}");
+                }
+            }
+
+            if (paperSize != null)
+            {
+                bool paperSizeSet = false;
+                foreach (PaperSize size in printDocument.PrinterSettings.PaperSizes)
+                {
+                    if (size != null && size.PaperName == paperSize)
+                    {
+                        printDocument.DefaultPageSettings.PaperSize = size;
+                        paperSizeSet = true;
+                        break;
+                    }
+                }
+
+                if (!paperSizeSet)
+                {
+                    throw new ArgumentException($"paperSize: {paperSize} was not valid for printerName: {printerName}");
+                }
+            }
+
             PrintState state = PrintStateFactory.Create(document, pageRange);
             printDocument.PrintPage += (_, e) => PrintDocumentOnPrintPage(e, state);
             printDocument.Print();
@@ -51,6 +94,6 @@ namespace PrintIt.Core
 
     public interface IPdfPrintService
     {
-        void Print(Stream pdfStream, string printerName, string pageRange = null, int numberOfCopies = 1);
+        void Print(Stream pdfStream, string printerName, string pageRange = null, int numberOfCopies = 1, string paperSource = null, string paperSize = null);
     }
 }

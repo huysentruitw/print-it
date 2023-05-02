@@ -29,7 +29,7 @@ namespace PrintIt.Core
             };
             foreach (PaperSource paperSource in settings.PaperSources)
             {
-                allSourceNames.Add(paperSource.SourceName);
+                allSourceNames.Add($"{paperSource.SourceName}, {paperSource.Kind.ToString()}, {paperSource.RawKind}");
             }
 
             return allSourceNames.ToArray();
