@@ -32,24 +32,20 @@ namespace PrintIt.Core
             printDocument.PrinterSettings.PrinterName = printerName;
             printDocument.PrinterSettings.Copies = (short)Math.Clamp(numberOfCopies, 1, short.MaxValue);
 
+            PaperSource chosenSource = null;
             if (paperSource != null)
             {
-                bool paperSourceSet = false;
-                var settings = new PrinterSettings
-                {
-                    PrinterName = printerName,
-                };
                 foreach (PaperSource source in printDocument.PrinterSettings.PaperSources)
                 {
                     if (source != null && source.SourceName == paperSource)
                     {
-                        printDocument.DefaultPageSettings.PaperSource = source;
-                        paperSourceSet = true;
+                        printDocument.PrinterSettings.DefaultPageSettings.PaperSource = source;
+                        chosenSource = source;
                         break;
                     }
                 }
 
-                if (!paperSourceSet)
+                if (chosenSource == null)
                 {
                     throw new SelectPaperSourceException(paperSource, printerName);
                 }
@@ -76,6 +72,7 @@ namespace PrintIt.Core
 
             PrintState state = PrintStateFactory.Create(document, pageRange);
             printDocument.PrintPage += (_, e) => PrintDocumentOnPrintPage(e, state);
+            printDocument.QueryPageSettings += (_, e) => MyPrintQueryPageSettingsEvent(e, chosenSource);
             printDocument.Print();
         }
 
@@ -89,6 +86,14 @@ namespace PrintIt.Core
             using PdfPage page = state.Document.OpenPage(state.CurrentPageIndex);
             page.RenderTo(e.Graphics, destinationRect);
             e.HasMorePages = state.AdvanceToNextPage();
+        }
+
+        private void MyPrintQueryPageSettingsEvent(QueryPageSettingsEventArgs e, PaperSource paperSource)
+        {
+            if (paperSource != null)
+            {
+                e.PageSettings.PaperSource = paperSource;
+            }
         }
     }
 
