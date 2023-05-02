@@ -51,7 +51,7 @@ namespace PrintIt.Core
 
                 if (!paperSourceSet)
                 {
-                    throw new ArgumentException($"paperSource: {paperSource} was not valid for printerName: {printerName}");
+                    throw new SelectPaperSourceException(paperSource, printerName);
                 }
             }
 
@@ -70,7 +70,7 @@ namespace PrintIt.Core
 
                 if (!paperSizeSet)
                 {
-                    throw new ArgumentException($"paperSize: {paperSize} was not valid for printerName: {printerName}");
+                    throw new SelectPaperSizeException(paperSize, printerName);
                 }
             }
 
@@ -95,5 +95,37 @@ namespace PrintIt.Core
     public interface IPdfPrintService
     {
         void Print(Stream pdfStream, string printerName, string pageRange = null, int numberOfCopies = 1, string paperSource = null, string paperSize = null);
+    }
+
+    public sealed class SelectPaperSizeException : Exception
+    {
+        public SelectPaperSizeException(string paperSize, string printerPath)
+            : base($"PaperSize: {paperSize} was not valid for printerName: {printerPath}")
+        {
+            PrinterPath = printerPath;
+            PaperSize = paperSize;
+        }
+
+        [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API")]
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Public API")]
+        public string PrinterPath { get; }
+
+        public string PaperSize { get; }
+    }
+
+    public sealed class SelectPaperSourceException : Exception
+    {
+        public SelectPaperSourceException(string paperSource, string printerPath)
+            : base($"PaperSource: {paperSource} was not valid for PrinterName: {printerPath}")
+        {
+            PrinterPath = printerPath;
+            PaperSource = paperSource;
+        }
+
+        [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API")]
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Public API")]
+        public string PrinterPath { get; }
+
+        public string PaperSource { get; }
     }
 }
