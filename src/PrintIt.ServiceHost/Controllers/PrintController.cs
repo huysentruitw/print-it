@@ -1,5 +1,7 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,18 +31,40 @@ namespace PrintIt.ServiceHost.Controllers
                 numberOfCopies: request.Copies ?? 1);
             return Ok();
         }
+
+        [HttpPost]
+        [Route("from-base64")]
+        public async Task<IActionResult> PrintFromBase64Pdf([FromBody] PrintFromBas64Request request)
+        {
+            var bytes = Convert.FromBase64String(request.PdfContent);            
+            await using Stream pdfStream = new MemoryStream(bytes);
+            _pdfPrintService.Print(pdfStream,
+                printerName: request.PrinterPath,
+                pageRange: request.PageRange,
+                numberOfCopies: request.Copies ?? 1);
+            return Ok();
+        }
     }
 
-    public sealed class PrintFromTemplateRequest
+    public class BasePrintRequest
     {
-        [Required]
-        public IFormFile PdfFile { get; set; }
-
         [Required]
         public string PrinterPath { get; set; }
 
         public string PageRange { get; set; }
 
         public int? Copies { get; set; }
+    }
+
+    public sealed class PrintFromTemplateRequest : BasePrintRequest
+    {
+        [Required]
+        public IFormFile PdfFile { get; set; }        
+    }
+
+    public sealed class PrintFromBas64Request : BasePrintRequest
+    {
+        [Required]
+        public string PdfContent { get; set; }
     }
 }
