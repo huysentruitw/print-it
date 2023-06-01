@@ -18,6 +18,14 @@ By default, _PrintIt.ServiceHost_ is listening on http://localhost:7000. The end
 
 List all available printers on the system.
 
+#### [GET] /printers/paperSources?printerPath=\\\\REMOTE_PC_NAME\\PRINTER-NAME
+
+List all paper sources(trays) on the printer with the UNC-path `\\REMOTE_PC_NAME\PRINTER-NAME`.
+
+#### [GET] /printers/paperSizes?printerPath=\\\\REMOTE_PC_NAME\\PRINTER-NAME
+
+List all paper sizes on the printer with the UNC-path `\\REMOTE_PC_NAME\PRINTER-NAME`.
+
 #### [POST] /printers/install?printerPath=\\\\REMOTE_PC_NAME\\PRINTER-NAME
 
 Install the network printer with the UNC-path `\\REMOTE_PC_NAME\PRINTER-NAME`. 
@@ -32,6 +40,8 @@ PdfFile      | :heavy_check_mark: | The PDF file to print (Content-type: applica
 PrinterPath  | :heavy_check_mark: | The UNC-path of the printer to send the PDF to
 PageRange    |                    | An optional page range string (f.e. "1-5", "1, 3", "1, 4-8", "2-", "-5")
 Copies       |                    | An optional number of copies (defaults to 1)
+PaperSource  |                    | An optional name of the page source. See GET for valid page sources
+PaperSize    |                    | An optional name of the page size. See GET for valid page sizes
 
 ## PDFium
 

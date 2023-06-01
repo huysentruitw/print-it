@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using PrintIt.Core;
 
 namespace PrintIt.ServiceHost.Controllers
@@ -20,6 +21,22 @@ namespace PrintIt.ServiceHost.Controllers
         {
             string[] installedPrinters = _printerService.GetInstalledPrinters();
             return Ok(installedPrinters);
+        }
+
+        [HttpGet]
+        [Route("paperSources")]
+        public IActionResult ListPaperSources([FromQuery] string printerPath)
+        {
+            string[] paperSources = _printerService.GetPrinterPageSources(printerPath);
+            return Ok(paperSources);
+        }
+
+        [HttpGet]
+        [Route("paperSizes")]
+        public IActionResult ListPaperSizes([FromQuery] string printerPath)
+        {
+            string[] paperSizes = _printerService.GetPrinterPageSizes(printerPath);
+            return Ok(paperSizes);
         }
 
         [HttpPost]
